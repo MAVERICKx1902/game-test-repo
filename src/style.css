@@ -1,23 +1,62 @@
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Silkscreen:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Silkscreen:wght@400;700&display=swap');
 
-:root {
-  color-scheme: dark;
-  font-family: "Silkscreen", monospace;
-  background: #080a0f;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-}
-
+:root { color-scheme: dark; font-family: "Silkscreen", monospace; background: #090d12; font-synthesis: none; }
 * { box-sizing: border-box; }
 html, body, #game-container { width: 100%; height: 100%; margin: 0; overflow: hidden; }
-body {
-  background:
-    radial-gradient(circle at 50% 40%, rgba(68, 79, 107, .14), transparent 45%),
-    #080a0f;
-}
-canvas {
-  display: block;
-  margin: auto;
-  image-rendering: pixelated;
-  image-rendering: crisp-edges;
+canvas { display: block; width: 100%; height: 100%; }
+button { font: inherit; }
+
+.creator { position: fixed; inset: 0; z-index: 20; overflow-y: auto; background: linear-gradient(90deg, rgba(5,8,12,.96) 0%, rgba(5,8,12,.9) 52%, rgba(5,8,12,.25) 100%); transition: opacity .3s, transform .3s; }
+.creator--leaving { opacity: 0; transform: scale(1.02); }
+.creator__panel { width: min(880px, calc(100% - 40px)); min-height: 100%; padding: 38px 0 45px max(24px, 4vw); }
+.eyebrow { margin: 0 0 8px; color: #b99e62; font-size: 10px; letter-spacing: .16em; }
+h1 { margin: 0; color: #f0dfb6; font: 700 clamp(30px, 4vw, 52px)/1.1 "Cinzel", serif; text-transform: uppercase; text-shadow: 0 3px 20px #000; }
+.creator__lead { margin: 8px 0 20px; color: #87969c; font-size: 10px; }
+.creator h2 { margin: 19px 0 9px; color: #9caab0; font-size: 10px; letter-spacing: .1em; }
+.creator__summary { display: flex; align-items: center; gap: 14px; min-height: 62px; }
+.creator__summary strong { display: block; color: #e8dcc1; font: 700 17px "Cinzel", serif; }
+.creator__summary span { display: block; margin-top: 5px; color: #819199; font-size: 8px; }
+.choice-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.choice { position: relative; min-height: 112px; padding: 14px; border: 1px solid #34424a; border-left: 4px solid #52616a; color: #bdc8cb; text-align: left; background: rgba(13,20,27,.94); cursor: pointer; transition: .15s ease; }
+.choice:hover { transform: translateY(-2px); border-color: #788991; background: #17232d; }
+.choice--selected { border-color: #c0a664; border-left-color: #dbc077; background: linear-gradient(135deg, #202a30, #151c24); box-shadow: inset 0 0 24px #b7983620, 0 8px 28px #0006; }
+.choice b, .choice small, .choice span { display: block; }
+.choice b { color: #e3d8bd; font: 700 16px "Cinzel", serif; text-transform: uppercase; }
+.choice small { margin: 5px 0 10px; color: #b89c62; font-size: 7px; text-transform: uppercase; }
+.choice span { color: #7e8c92; font-size: 8px; line-height: 1.5; }
+.enter-world { width: 100%; margin-top: 22px; padding: 16px; border: 1px solid #ead296; color: #111820; background: #bca15f; cursor: pointer; text-transform: uppercase; letter-spacing: .06em; transition: .15s; }
+.enter-world:hover { background: #ddc47f; box-shadow: 0 0 26px #c0a55744; }
+.enter-world span { float: right; }
+
+.avatar { --skin:#d9a677; --hair:#4b2931; --accent:#c5a766; position: relative; flex: 0 0 auto; width: 58px; height: 58px; overflow: hidden; border: 2px solid var(--accent); background: radial-gradient(circle at 50% 65%, color-mix(in srgb, var(--accent) 30%, #111923), #0b1118 70%); box-shadow: inset 0 0 15px #0008; }
+.avatar::before { content:""; position: absolute; left: 17px; top: 13px; width: 23px; height: 31px; border-radius: 46% 46% 42% 42%; background: var(--skin); box-shadow: -4px -7px 0 2px var(--hair), 4px -7px 0 2px var(--hair); }
+.avatar::after { content:""; position: absolute; left: 21px; top: 26px; width: 4px; height: 3px; background: #c9f5f1; box-shadow: 12px 0 #c9f5f1, 6px 10px 0 -1px #5c3740; }
+.avatar i { position: absolute; z-index: 2; left: 10px; right: 10px; bottom: -7px; height: 22px; border-radius: 50% 50% 0 0; background: var(--accent); }
+.avatar--high-elf::before, .avatar--dark-elf::before { box-shadow: -10px 5px 0 -4px var(--skin), 10px 5px 0 -4px var(--skin), -4px -7px 0 2px var(--hair), 4px -7px 0 2px var(--hair); }
+.avatar--dark-elf::after { background:#d4a5ff; box-shadow:12px 0 #d4a5ff, 6px 10px 0 -1px #493349; }
+
+.hud { position: fixed; inset: 0; z-index: 10; pointer-events: none; }
+.hud__identity { position: absolute; top: 18px; left: 18px; display: flex; gap: 10px; width: 366px; padding: 10px; border: 1px solid #59666c; background: linear-gradient(90deg, rgba(6,10,14,.96), rgba(10,15,20,.88)); box-shadow: 0 6px 25px #0007; }
+.hud .avatar { width: 66px; height: 66px; }
+.hud__stats { flex: 1; min-width: 0; }
+.hud__stats > strong { display: block; overflow: hidden; color: #e7d9b7; font: 700 14px "Cinzel", serif; text-overflow: ellipsis; text-transform: uppercase; white-space: nowrap; }
+.hud__stats > small { display: block; margin: 2px 0 7px; color: #84939a; font-size: 7px; }
+.resource { position: relative; height: 14px; margin-top: 5px; overflow: hidden; border: 1px solid #59646a; background: #131820; }
+.resource i { position: absolute; inset: 2px; }
+.resource--health i { background: linear-gradient(90deg, #812d36, #c74a50); }
+.resource--mana i { background: linear-gradient(90deg, #275594, #477fca); }
+.resource b, .resource span { position: absolute; z-index: 1; top: 2px; color: white; font-size: 7px; text-shadow: 1px 1px #000; }
+.resource b { left: 5px; }.resource span { right: 5px; }
+.guild-rank { position: absolute; top: 106px; left: 18px; display: flex; align-items: center; justify-content: space-between; width: 160px; height: 30px; padding: 0 10px; border: 1px solid #59666c; background: #070b10e8; text-transform: uppercase; }
+.guild-rank span { color: #849198; font-size: 8px; }.guild-rank b { color: #ddbd70; font: 700 19px "Cinzel", serif; }
+.controls { position: absolute; bottom: 20px; left: 50%; padding: 9px 14px; transform: translateX(-50%); border: 1px solid #52606888; color: #93a1a7; background: #080c11d9; font-size: 8px; white-space: nowrap; }
+.controls b { color: #d6ba76; }
+
+@media (max-width: 680px) {
+  .creator__panel { width: calc(100% - 24px); padding: 25px 0 30px 18px; }
+  .choice-grid { grid-template-columns: 1fr; }
+  .choice { min-height: 82px; }
+  .hud__identity { top: 10px; left: 10px; width: calc(100% - 20px); }
+  .guild-rank { top: 98px; left: 10px; }
+  .controls { bottom: 10px; font-size: 7px; }
 }
