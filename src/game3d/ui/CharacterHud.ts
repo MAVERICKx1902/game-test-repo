@@ -18,7 +18,8 @@ export class CharacterHud {
         </div>
       </div>
       <div class="guild-rank"><span>Guild rank</span><b>F</b></div>
-      <div class="controls"><b>WASD</b> / ARROWS · EXPLORE THE FRONTIER</div>`;
+      <div class="crosshair" aria-hidden="true"></div>
+      <div class="controls"><b>CLICK</b> TO LOOK · <b>WASD</b> TO MOVE · DRAG ALSO LOOKS</div>`;
     document.body.append(hud);
   }
 

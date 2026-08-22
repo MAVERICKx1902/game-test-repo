@@ -4,10 +4,11 @@ A browser-based low-poly 3D action-RPG foundation built with **Three.js and Type
 
 ## Current playable milestone
 
-- Perspective 3D world with lighting, soft shadows, atmospheric fog, roads, village buildings, forest, and a glowing Guild crystal
-- Smooth top-down follow camera
-- WASD and arrow-key movement with normalized diagonals and world bounds
-- Procedural low-poly 3D character with walking animation and a readable face
+- First-person fantasy-survival presentation inspired by the immersive exploration feel of *The Forest*
+- Mouse-look with pointer lock plus drag-to-look fallback for embedded previews
+- Perspective 3D world with lighting, soft shadows, dense atmospheric fog, roads, village buildings, forests, ancient ruins, a campfire, arcane fungi, and a glowing Guild crystal
+- WASD and arrow-key movement with normalized diagonals, head bob, equipment sway, and world bounds
+- Visible first-person arms and class equipment
 - Data-driven character creation
   - Races: Human, High Elf, Dark Elf
   - Classes: Knight, Magician, Ranger
@@ -32,6 +33,9 @@ npm run build
 ## Controls
 
 - Move: **WASD** or **arrow keys**
+- Look: **click the game**, then move the mouse
+- Embedded-browser fallback: **hold and drag** to look around
+- Press **Escape** to release the mouse
 - Diagonal movement is normalized to match cardinal movement speed.
 
 ## Architecture
@@ -42,8 +46,7 @@ src/game3d/
 ├── character/
 │   ├── CharacterDefinitions.ts        # data-driven race/class catalog
 │   ├── CharacterProfile.ts            # serializable identity and derived stats
-│   ├── CharacterModel.ts              # procedural low-poly avatar factory
-│   └── CharacterController.ts         # movement, animation, camera following
+│   └── CharacterController.ts         # first-person movement, look, and equipment
 ├── ui/
 │   ├── CharacterCreation.ts           # responsive character selection
 │   └── CharacterHud.ts                # portrait, HP, MP, level, guild rank

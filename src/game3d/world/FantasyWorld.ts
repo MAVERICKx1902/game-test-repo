@@ -4,8 +4,8 @@ const standard = (color: number, roughness = 0.9) => new THREE.MeshStandardMater
 
 export class FantasyWorld {
   constructor(scene: THREE.Scene) {
-    scene.background = new THREE.Color(0x111a21);
-    scene.fog = new THREE.Fog(0x111a21, 28, 76);
+    scene.background = new THREE.Color(0x0b1518);
+    scene.fog = new THREE.FogExp2(0x0b1518, 0.026);
 
     const ground = new THREE.Mesh(new THREE.PlaneGeometry(90, 90, 18, 18), standard(0x263c35));
     ground.rotation.x = -Math.PI / 2;
@@ -20,6 +20,7 @@ export class FantasyWorld {
 
     this.addVillage(scene);
     this.addForest(scene);
+    this.addRuins(scene);
     this.addGuildCrystal(scene);
   }
 
@@ -70,6 +71,42 @@ export class FantasyWorld {
       tree.position.set(x, 0, z);
       tree.scale.setScalar(scale);
       scene.add(tree);
+    }
+  }
+
+  private addRuins(scene: THREE.Scene): void {
+    const stone = standard(0x48544f);
+    const ruin = new THREE.Group();
+    for (const [x, y, height] of [[-4, 1.7, 3.4], [4, 1.35, 2.7], [0, 2.8, 0.7]]) {
+      const block = new THREE.Mesh(new THREE.BoxGeometry(x === 0 ? 7.5 : 1, height, 1), stone);
+      block.position.set(x, y, 0);
+      block.castShadow = true;
+      block.receiveShadow = true;
+      ruin.add(block);
+    }
+    ruin.position.set(-27, 0, 24);
+    ruin.rotation.y = 0.45;
+    scene.add(ruin);
+
+    const campLight = new THREE.PointLight(0xff7a32, 8, 13, 2);
+    campLight.position.set(7, 1.2, 10);
+    scene.add(campLight);
+    const flame = new THREE.Mesh(
+      new THREE.ConeGeometry(0.22, 0.8, 7),
+      new THREE.MeshStandardMaterial({ color: 0xffa13b, emissive: 0xff4b19, emissiveIntensity: 3 }),
+    );
+    flame.position.set(7, 0.45, 10);
+    scene.add(flame);
+
+    // Arcane fungi provide subtle navigation points through the dark woods.
+    for (const [x, z] of [[-9, 18], [22, 23], [-31, -14], [28, -27], [-22, 3]]) {
+      const mushroom = new THREE.Mesh(
+        new THREE.SphereGeometry(0.22, 7, 5),
+        new THREE.MeshStandardMaterial({ color: 0x78d6c8, emissive: 0x2b8178, emissiveIntensity: 2.5 }),
+      );
+      mushroom.scale.y = 0.45;
+      mushroom.position.set(x, 0.2, z);
+      scene.add(mushroom);
     }
   }
 

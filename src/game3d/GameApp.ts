@@ -7,7 +7,7 @@ import { FantasyWorld } from './world/FantasyWorld';
 
 export class GameApp {
   private readonly scene = new THREE.Scene();
-  private readonly camera = new THREE.PerspectiveCamera(48, window.innerWidth / window.innerHeight, 0.1, 120);
+  private readonly camera = new THREE.PerspectiveCamera(72, window.innerWidth / window.innerHeight, 0.08, 140);
   private readonly renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
   private readonly clock = new THREE.Clock();
   private controller?: CharacterController;
@@ -33,14 +33,13 @@ export class GameApp {
   }
 
   private startAdventure(profile: CharacterProfile): void {
-    this.controller = new CharacterController(this.scene, profile);
+    this.controller = new CharacterController(this.scene, this.camera, this.renderer.domElement, profile);
     new CharacterHud(profile);
   }
 
   private update(): void {
     const delta = Math.min(this.clock.getDelta(), 0.05);
-    const elapsed = this.clock.elapsedTime;
-    this.controller?.update(delta, elapsed, this.camera);
+    this.controller?.update(delta);
     this.renderer.render(this.scene, this.camera);
   }
 

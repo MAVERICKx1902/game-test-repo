@@ -3,7 +3,7 @@
 :root { color-scheme: dark; font-family: "Silkscreen", monospace; background: #090d12; font-synthesis: none; }
 * { box-sizing: border-box; }
 html, body, #game-container { width: 100%; height: 100%; margin: 0; overflow: hidden; }
-canvas { display: block; width: 100%; height: 100%; }
+canvas { display: block; width: 100%; height: 100%; outline: none; cursor: crosshair; }
 button { font: inherit; }
 
 .creator { position: fixed; inset: 0; z-index: 20; overflow-y: auto; background: linear-gradient(90deg, rgba(5,8,12,.96) 0%, rgba(5,8,12,.9) 52%, rgba(5,8,12,.25) 100%); transition: opacity .3s, transform .3s; }
@@ -49,6 +49,9 @@ h1 { margin: 0; color: #f0dfb6; font: 700 clamp(30px, 4vw, 52px)/1.1 "Cinzel", s
 .resource b { left: 5px; }.resource span { right: 5px; }
 .guild-rank { position: absolute; top: 106px; left: 18px; display: flex; align-items: center; justify-content: space-between; width: 160px; height: 30px; padding: 0 10px; border: 1px solid #59666c; background: #070b10e8; text-transform: uppercase; }
 .guild-rank span { color: #849198; font-size: 8px; }.guild-rank b { color: #ddbd70; font: 700 19px "Cinzel", serif; }
+.crosshair { position: absolute; left: 50%; top: 50%; width: 4px; height: 4px; transform: translate(-50%, -50%); border: 1px solid #fff; border-radius: 50%; box-shadow: 0 0 5px #000, 0 0 8px #fff8; }
+.crosshair::before, .crosshair::after { content:""; position:absolute; background:#e9eeeeaa; box-shadow:0 0 2px #000; }
+.crosshair::before { width:12px; height:1px; left:-5px; top:1px; }.crosshair::after { width:1px; height:12px; left:1px; top:-5px; }
 .controls { position: absolute; bottom: 20px; left: 50%; padding: 9px 14px; transform: translateX(-50%); border: 1px solid #52606888; color: #93a1a7; background: #080c11d9; font-size: 8px; white-space: nowrap; }
 .controls b { color: #d6ba76; }
 
