@@ -4,8 +4,8 @@ const standard = (color: number, roughness = 0.9) => new THREE.MeshStandardMater
 
 export class FantasyWorld {
   constructor(scene: THREE.Scene) {
-    scene.background = new THREE.Color(0x0b1518);
-    scene.fog = new THREE.FogExp2(0x0b1518, 0.026);
+    scene.background = this.createSkyTexture();
+    scene.fog = new THREE.FogExp2(0xa8cbd1, 0.011);
 
     const ground = new THREE.Mesh(new THREE.PlaneGeometry(90, 90, 18, 18), standard(0x263c35));
     ground.rotation.x = -Math.PI / 2;
@@ -18,10 +18,45 @@ export class FantasyWorld {
     road.receiveShadow = true;
     scene.add(road);
 
+    this.addClouds(scene);
     this.addVillage(scene);
     this.addForest(scene);
     this.addRuins(scene);
     this.addGuildCrystal(scene);
+  }
+
+  private createSkyTexture(): THREE.CanvasTexture {
+    const canvas = document.createElement('canvas');
+    canvas.width = 1024;
+    canvas.height = 512;
+    const context = canvas.getContext('2d');
+    if (!context) throw new Error('Unable to create sky texture.');
+    const gradient = context.createLinearGradient(0, 0, 0, canvas.height);
+    gradient.addColorStop(0, '#287ec4');
+    gradient.addColorStop(0.48, '#65b8e2');
+    gradient.addColorStop(0.78, '#c5e7ed');
+    gradient.addColorStop(1, '#f2d7a8');
+    context.fillStyle = gradient;
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    return texture;
+  }
+
+  private addClouds(scene: THREE.Scene): void {
+    const cloudMaterial = new THREE.MeshStandardMaterial({ color: 0xf2f7f3, transparent: true, opacity: 0.82, roughness: 1 });
+    for (const [x, y, z, scale] of [[-18, 19, -30, 3], [24, 23, -18, 4], [-34, 25, 12, 3.4], [18, 20, 31, 2.8]]) {
+      const cloud = new THREE.Group();
+      for (let part = 0; part < 5; part += 1) {
+        const puff = new THREE.Mesh(new THREE.SphereGeometry(1, 8, 6), cloudMaterial);
+        puff.position.set((part - 2) * 0.72, Math.abs(part - 2) * -0.14, part % 2 * 0.35);
+        puff.scale.set(1.35, 0.62, 0.8);
+        cloud.add(puff);
+      }
+      cloud.position.set(x, y, z);
+      cloud.scale.setScalar(scale);
+      scene.add(cloud);
+    }
   }
 
   private addVillage(scene: THREE.Scene): void {

@@ -3,6 +3,7 @@ import { CharacterController } from './character/CharacterController';
 import type { CharacterProfile } from './character/CharacterProfile';
 import { CharacterCreation } from './ui/CharacterCreation';
 import { CharacterHud } from './ui/CharacterHud';
+import { Inventory } from './ui/Inventory';
 import { FantasyWorld } from './world/FantasyWorld';
 
 export class GameApp {
@@ -35,6 +36,7 @@ export class GameApp {
   private startAdventure(profile: CharacterProfile): void {
     this.controller = new CharacterController(this.scene, this.camera, this.renderer.domElement, profile);
     new CharacterHud(profile);
+    new Inventory(profile);
   }
 
   private update(): void {

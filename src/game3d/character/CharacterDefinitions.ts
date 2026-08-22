@@ -1,5 +1,5 @@
 export type RaceId = 'human' | 'high-elf' | 'dark-elf';
-export type ClassId = 'knight' | 'magician' | 'ranger';
+export type ClassId = 'knight' | 'magician' | 'ranger' | 'paladin' | 'cleric' | 'assassin';
 
 export interface RaceDefinition {
   id: RaceId;
@@ -34,6 +34,9 @@ export const CLASSES: readonly ClassDefinition[] = [
   { id: 'knight', name: 'Knight', role: 'Vanguard', description: 'Armored defender trained to hold the front line.', health: 180, mana: 70, armorColor: 0x526579 },
   { id: 'magician', name: 'Magician', role: 'Arcane Damage', description: 'A learned spellcaster with a vast mana reserve.', health: 105, mana: 210, armorColor: 0x394b82 },
   { id: 'ranger', name: 'Ranger', role: 'Ranged Scout', description: 'A mobile hunter who strikes from a distance.', health: 135, mana: 125, armorColor: 0x466849 },
+  { id: 'paladin', name: 'Paladin', role: 'Holy Vanguard', description: 'A sacred guardian wielding steel and restorative light.', health: 170, mana: 135, armorColor: 0xb9a45d },
+  { id: 'cleric', name: 'Cleric', role: 'Divine Support', description: 'A devoted healer who protects an entire adventuring party.', health: 125, mana: 190, armorColor: 0xe2d6b0 },
+  { id: 'assassin', name: 'Assassin', role: 'Shadow Damage', description: 'An elusive dual-blade fighter built for sudden critical strikes.', health: 120, mana: 120, armorColor: 0x292a35 },
 ];
 
 export const getRace = (id: RaceId): RaceDefinition => RACES.find((item) => item.id === id) ?? RACES[0];

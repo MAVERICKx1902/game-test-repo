@@ -25,7 +25,10 @@ export class CharacterController {
   ) {
     this.rig.position.set(0, 0, 4);
     this.camera.position.set(0, 1.72, 0);
+    // Clear the character-creation camera's lookAt rotation. Keeping that old
+    // quaternion caused a visible roll when the first-person controller began.
     this.camera.rotation.order = 'YXZ';
+    this.camera.rotation.set(0, 0, 0);
     this.rig.add(this.camera);
     scene.add(this.rig);
     this.createFirstPersonEquipment(profile);
@@ -108,15 +111,21 @@ export class CharacterController {
     arm.position.set(0.4, -0.26, -0.55);
     this.hands.add(arm);
 
-    if (profile.classId === 'knight') {
+    if (profile.classId === 'knight' || profile.classId === 'paladin') {
       const blade = new THREE.Mesh(
         new THREE.BoxGeometry(0.055, 0.06, 1.35),
-        new THREE.MeshStandardMaterial({ color: 0xcbd5d7, metalness: 0.8, roughness: 0.22 }),
+        new THREE.MeshStandardMaterial({
+          color: profile.classId === 'paladin' ? 0xffdc83 : 0xcbd5d7,
+          emissive: profile.classId === 'paladin' ? 0x6b4810 : 0x000000,
+          emissiveIntensity: 0.5,
+          metalness: 0.8,
+          roughness: 0.22,
+        }),
       );
       blade.rotation.x = 0.16;
       blade.position.set(0.42, -0.17, -1.06);
       this.hands.add(blade);
-    } else if (profile.classId === 'magician') {
+    } else if (profile.classId === 'magician' || profile.classId === 'cleric') {
       const staff = new THREE.Mesh(
         new THREE.CylinderGeometry(0.025, 0.04, 1.5, 7),
         new THREE.MeshStandardMaterial({ color: 0x63432d, roughness: 1 }),
@@ -129,6 +138,16 @@ export class CharacterController {
       );
       crystal.position.set(0.42, 0.28, -1.4);
       this.hands.add(staff, crystal);
+    } else if (profile.classId === 'assassin') {
+      for (const x of [0.28, 0.55]) {
+        const dagger = new THREE.Mesh(
+          new THREE.BoxGeometry(0.035, 0.035, 0.72),
+          new THREE.MeshStandardMaterial({ color: 0x9fa8b5, metalness: 0.85, roughness: 0.2 }),
+        );
+        dagger.position.set(x, -0.22, -0.72 - x * 0.2);
+        dagger.rotation.y = x === 0.28 ? -0.16 : 0.16;
+        this.hands.add(dagger);
+      }
     } else {
       const bow = new THREE.Mesh(
         new THREE.TorusGeometry(0.38, 0.025, 5, 12, Math.PI * 1.55),
