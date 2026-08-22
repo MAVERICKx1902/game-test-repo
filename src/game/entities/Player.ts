@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import type { CharacterProfile } from '../character/CharacterProfile';
 import { PlayerInput } from '../input/PlayerInput';
 
 export type FacingDirection = 'north' | 'south' | 'east' | 'west';
@@ -6,22 +7,20 @@ export type MovementState = 'idle' | 'walk';
 
 const MOVE_SPEED = 155;
 
-/**
- * Domain object for the player character.
- * Combat, equipment, and stats can be composed into this class later without
- * leaking input or camera concerns into those systems.
- */
+/** Player domain object. Combat and equipment can be composed here later. */
 export class Player extends Phaser.Physics.Arcade.Sprite {
   private readonly controls: PlayerInput;
+  private readonly profile: CharacterProfile;
   private facing: FacingDirection = 'south';
   private movementState: MovementState = 'idle';
 
-  constructor(scene: Phaser.Scene, x: number, y: number) {
-    super(scene, x, y, 'player-south-0');
+  constructor(scene: Phaser.Scene, x: number, y: number, profile: CharacterProfile) {
+    super(scene, x, y, `${profile.texturePrefix}-south-0`);
 
     scene.add.existing(this);
     scene.physics.add.existing(this);
     this.controls = new PlayerInput(scene);
+    this.profile = profile;
 
     this.setDepth(y);
     this.setCollideWorldBounds(true);
@@ -40,7 +39,6 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       this.setMovementState('idle');
     }
 
-    // Y-sorting prepares the renderer for props and NPCs occupying the world.
     this.setDepth(Math.round(this.y));
   }
 
@@ -57,7 +55,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   private setMovementState(nextState: MovementState): void {
-    const animationKey = `player-${nextState}-${this.facing}`;
+    const animationKey = `${this.profile.texturePrefix}-${nextState}-${this.facing}`;
     if (this.movementState !== nextState || this.anims.currentAnim?.key !== animationKey) {
       this.movementState = nextState;
       this.play(animationKey, true);

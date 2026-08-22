@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import './style.css';
 import { BootScene } from './game/scenes/BootScene';
+import { CharacterCreationScene } from './game/scenes/CharacterCreationScene';
 import { WorldScene } from './game/scenes/WorldScene';
 
 const config: Phaser.Types.Core.GameConfig = {
@@ -19,7 +20,7 @@ const config: Phaser.Types.Core.GameConfig = {
     default: 'arcade',
     arcade: { debug: false },
   },
-  scene: [BootScene, WorldScene],
+  scene: [BootScene, CharacterCreationScene, WorldScene],
 };
 
 new Phaser.Game(config);

@@ -1,5 +1,7 @@
 import Phaser from 'phaser';
+import { CharacterProfile } from '../character/CharacterProfile';
 import { Player } from '../entities/Player';
+import { CharacterHud } from '../ui/CharacterHud';
 
 const WORLD_WIDTH = 2400;
 const WORLD_HEIGHT = 1600;
@@ -19,9 +21,12 @@ export class WorldScene extends Phaser.Scene {
     this.drawPrototypeGround();
     this.drawLandmarks();
 
-    this.player = new Player(this, WORLD_WIDTH / 2, WORLD_HEIGHT / 2);
+    const profile = this.registry.get('characterProfile') as CharacterProfile | undefined
+      ?? new CharacterProfile('Aren Valeborn', 'human', 'knight');
+    this.player = new Player(this, WORLD_WIDTH / 2, WORLD_HEIGHT / 2, profile);
     this.configureCamera();
-    this.createOverlay();
+    new CharacterHud(this, profile);
+    this.createMovementHint();
   }
 
   update(): void {
@@ -98,23 +103,17 @@ export class WorldScene extends Phaser.Scene {
     }
   }
 
-  private createOverlay(): void {
-    const panel = this.add.rectangle(18, 18, 252, 55, 0x080b10, 0.88)
-      .setOrigin(0)
-      .setScrollFactor(0)
-      .setDepth(100_000);
-    panel.setStrokeStyle(1, 0x596773, 0.75);
-
-    this.add.text(32, 29, 'MOVEMENT PROTOTYPE', {
-      fontFamily: 'Silkscreen, monospace',
-      fontSize: '11px',
-      color: '#d1b675',
-    }).setScrollFactor(0).setDepth(100_001);
-
-    this.add.text(32, 51, 'WASD / ARROWS  ·  EXPLORE', {
+  private createMovementHint(): void {
+    const hint = this.add.text(this.scale.width / 2, this.scale.height - 28, 'WASD / ARROWS  ·  EXPLORE', {
       fontFamily: 'Silkscreen, monospace',
       fontSize: '9px',
       color: '#9ba9b0',
-    }).setScrollFactor(0).setDepth(100_001);
+      backgroundColor: '#080b10dd',
+      padding: { x: 12, y: 7 },
+    }).setOrigin(0.5).setScrollFactor(0).setDepth(100_001);
+
+    this.scale.on('resize', (size: Phaser.Structs.Size) => {
+      hint.setPosition(size.width / 2, size.height - 28);
+    });
   }
 }
